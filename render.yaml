@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: my-fastapi-backend
+    name: Online_notice_board
     plan: free
     runtime: python
     buildCommand: "pip install -r requirements.txt"

@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from supabase import create_client, Client
 from fastapi.middleware.cors import CORSMiddleware
 
+# 
+
 load_dotenv()
 
 url: str = os.environ.get("SUPABASE_URL")
@@ -61,7 +63,7 @@ def sign_up(users: signup_user):
         
         response = supabase.auth.get_user()
         user_id = response.user.id
-
+    
         # insert data to know the role
         response = (
             supabase.table("user_to_role")
@@ -69,9 +71,9 @@ def sign_up(users: signup_user):
             .execute()
         )
 
-        return {"success":"yes"}        
+        return {"sucess":"yes", "user_id":user_id, "Role":users.role}        
     except Exception as e:
-        return {"success":"no", "error":e}
+        return {"sucess":"no", "error":e}
 
 
 # Sign in
@@ -92,6 +94,7 @@ def sign_in(users:signin_user):
             .select("Role") 
             .eq("id", user_id) 
             .execute())
+        
 
         global role
         global email
@@ -99,9 +102,9 @@ def sign_in(users:signin_user):
         email = users.email
         role = response.data[0]["Role"]
 
-        return {"success":"yes"}
+        return {"sucess":"yes", "role": role, "user_id":user_id}
     except Exception as e:
-        return {"success":"no","error":e}
+        return {"sucess":"no","error":e}
 
 # =======================================================================================================
 # Admin prevliage
@@ -115,9 +118,9 @@ def admin_make_post(posts: post, role: str = Header(None)):
                 .execute()
             )
 
-            return {"success":"yes"}
+            return {"sucess":"yes"}
         except Exception as e:
-            return {"success":"no","error":e}
+            return {"sucess":"no","error":e}
 
 
 @app.get("/admin/read")
@@ -129,10 +132,10 @@ def admin_read_post():
                 .from_("posts") 
                 .select("*") 
                 .execute())
-            return {"success":"yes", "data":response.data}
+            return {"sucess":"yes", "data":response.data}
             
         except Exception as e:
-            return {"success":"no","error":e}
+            return {"sucess":"no","error":e}
         
 # =======================================================================================================
 # Club previlage
@@ -146,9 +149,9 @@ def club_post(posts: post):
                 .execute()
             )
 
-            return {"success":"yes"}
+            return {"sucess":"yes"}
         except Exception as e:
-            return {"success":"no","error":e}
+            return {"sucess":"no","error":e}
 
 @app.get("/club/read")
 def club_read():
@@ -159,10 +162,11 @@ def club_read():
                 .select("*")
                 .eq("posted_by", email) 
                 .execute())
-            return {"success":"yes", "data":response.data}
+            return {"sucess":"yes", "data":response.data}
             
         except Exception as e:
-            return {"success":"no","error":e}
+            return {"sucess":"no","error":e}
+
 # =======================================================================================================
 # Studenet previlage
 @app.get("/student/read")
@@ -173,9 +177,7 @@ def student_read():
                 .from_("posts") 
                 .select("post_title, post_body") 
                 .execute())
-            return {"success":"yes", "data":response.data}      
+            return {"sucess":"yes", "data":response.data}      
         except Exception as e:
-            return {"success":"no","error":e}
-
-
+            return {"sucess":"no","error":e}
 

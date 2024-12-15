@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from dotenv import load_dotenv #
 from fastapi import FastAPI, Header
 from pydantic import BaseModel
@@ -48,7 +49,7 @@ class signin_user(BaseModel):
 class post(BaseModel):
     post_title: str
     post_body: str
-    post_expiray_date: str
+    post_expiray_date: Optional[str] = None
 
 # Auth
 # =======================================================================================================
@@ -102,7 +103,7 @@ def sign_in(users:signin_user):
         email = users.email
         role = response.data[0]["Role"]
 
-        return {"sucess":"yes", "role": role, "user_id":user_id}
+        return {"success":"yes", "role": role, "user_id":user_id}
     except Exception as e:
         return {"success":"no","error":e}
 

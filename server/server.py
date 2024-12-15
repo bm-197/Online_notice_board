@@ -71,9 +71,9 @@ def sign_up(users: signup_user):
             .execute()
         )
 
-        return {"sucess":"yes", "user_id":user_id, "Role":users.role}        
+        return {"success":"yes", "user_id":user_id, "Role":users.role}        
     except Exception as e:
-        return {"sucess":"no", "error":e}
+        return {"success":"no", "error":e}
 
 
 # Sign in
@@ -104,7 +104,7 @@ def sign_in(users:signin_user):
 
         return {"sucess":"yes", "role": role, "user_id":user_id}
     except Exception as e:
-        return {"sucess":"no","error":e}
+        return {"success":"no","error":e}
 
 # =======================================================================================================
 # Admin prevliage
@@ -118,9 +118,9 @@ def admin_make_post(posts: post, role: str = Header(None)):
                 .execute()
             )
 
-            return {"sucess":"yes"}
+            return {"success":"yes"}
         except Exception as e:
-            return {"sucess":"no","error":e}
+            return {"success":"no","error":e}
 
 
 @app.get("/admin/read")
@@ -132,10 +132,10 @@ def admin_read_post():
                 .from_("posts") 
                 .select("*") 
                 .execute())
-            return {"sucess":"yes", "data":response.data}
+            return {"success":"yes", "data":response.data}
             
         except Exception as e:
-            return {"sucess":"no","error":e}
+            return {"success":"no","error":e}
         
 # =======================================================================================================
 # Club previlage
@@ -149,9 +149,9 @@ def club_post(posts: post):
                 .execute()
             )
 
-            return {"sucess":"yes"}
+            return {"success":"yes"}
         except Exception as e:
-            return {"sucess":"no","error":e}
+            return {"success":"no","error":e}
 
 @app.get("/club/read")
 def club_read():
@@ -162,10 +162,10 @@ def club_read():
                 .select("*")
                 .eq("posted_by", email) 
                 .execute())
-            return {"sucess":"yes", "data":response.data}
+            return {"success":"yes", "data":response.data}
             
         except Exception as e:
-            return {"sucess":"no","error":e}
+            return {"success":"no","error":e}
 
 # =======================================================================================================
 # Studenet previlage
@@ -177,7 +177,7 @@ def student_read():
                 .from_("posts") 
                 .select("post_title, post_body") 
                 .execute())
-            return {"sucess":"yes", "data":response.data}      
+            return {"success":"yes", "data":response.data}      
         except Exception as e:
-            return {"sucess":"no","error":e}
+            return {"success":"no","error":e}
 

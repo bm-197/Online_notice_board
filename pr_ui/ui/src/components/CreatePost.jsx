@@ -3,7 +3,7 @@ import { Button, TextField, Typography } from "@mui/material";
 import axios from "axios"; // Use Axios for making HTTP requests
 
 const CreatePost = () => {
-  const [post, setPost] = useState({ title: "", body: "" });
+  const [post, setPost] = useState({ title: "", body: "", expiration_date: "" });
   const [responseMessage, setResponseMessage] = useState("");
   const [responseType, setResponseType] = useState("");
 
@@ -11,6 +11,7 @@ const CreatePost = () => {
     const payload = {
       post_title: post.title,
       post_body: post.body,
+      post_expiray_date: null,
       //   post_tags: post.tags, // Include tags if the backend supports it
     };
 
@@ -29,7 +30,7 @@ const CreatePost = () => {
       console.log(response.data);
       if (response.data.success === "yes") {
         setResponseMessage("Post created successfully!");
-        setPost({ title: "", content: "" });
+        setPost({ title: "", content: "", expiration_date: ""});
         setResponseType("success");
       } else {
         setResponseMessage(`Error: ${response.data.error}`);

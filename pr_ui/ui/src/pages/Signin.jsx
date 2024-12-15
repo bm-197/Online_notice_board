@@ -45,7 +45,7 @@ const SignIn = () => {
         alignItems: "center",
       }}
     >
-      <Typography variant="h5" sx={{ marginBottom: 2 }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, color: "black"}}>
         Admin Sign-In
       </Typography>
       <TextField

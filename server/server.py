@@ -1,8 +1,9 @@
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from pydantic import BaseModel
 from supabase import create_client, Client
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -21,6 +22,14 @@ id, Role, created_at
 posts databse
 post_id, post_title, post_body, post_expiray_date, created_at, posted_by	
 '''
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
+)
 
 # Form thingy when sign up user
 class signup_user(BaseModel):
@@ -97,7 +106,7 @@ def sign_in(users:signin_user):
 # =======================================================================================================
 # Admin prevliage
 @app.post("/admin/post")
-def admin_make_post(posts: post):
+def admin_make_post(posts: post, role: str = Header(None)):
     if role == "admin":
         try:
             response = (

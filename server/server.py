@@ -171,7 +171,7 @@ def club_read():
 # =======================================================================================================
 # Studenet previlage
 @app.get("/student/read")
-def student_read():
+def student_read(role: str = Header(None)):
     if role == "student":
         try:
             response = (supabase 

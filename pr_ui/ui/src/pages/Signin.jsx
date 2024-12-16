@@ -19,6 +19,7 @@ const SignIn = () => {
       console.log("API Response:", response.data); // Debugging
   
       if (response.data.success === "yes") {
+        console.log("Successfully Loged in")
         localStorage.setItem("adminToken", "authenticated");
         localStorage.setItem("role", "admin");
         setResponseMessage("Sign-in successful!");
@@ -71,7 +72,7 @@ const SignIn = () => {
         <Typography
           sx={{
             marginTop: 2,
-            color: responseMessage.includes("successful") ? "green" : "red",
+            color: responseMessage === "successful" ? "green" : "red",
           }}
         >
           {responseMessage}

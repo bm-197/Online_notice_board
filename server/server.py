@@ -141,7 +141,7 @@ def admin_read_post():
 # =======================================================================================================
 # Club previlage
 @app.post("/club/post")
-def club_post(posts: post):
+def club_post(posts: post, role: str = Header(None)):
     if role == "club":
         try:
             response = (

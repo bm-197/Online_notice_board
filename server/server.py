@@ -177,7 +177,6 @@ def student_read(role: str = Header(None)):
             response = (supabase 
                 .from_("posts") 
                 .select("*")
-                .eq("posted_by", email) 
                 .execute())
             return {"success":"yes", "data":response.data}    
         except Exception as e:

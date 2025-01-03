@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from Models.schemas import SignupUser, SigninUser
-from Database.supabase import supabase
+from ..Models.schemas import SignupUser, SigninUser
+from ..Database.supabase import supabase
 
 router = APIRouter()
 

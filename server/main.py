@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from Core.middleware import setup_middleware
-from Routes import auth, admin, club, student
+from .Core.middleware import setup_middleware
+from .Routes import auth, admin, club, student
 
 app = FastAPI()
 

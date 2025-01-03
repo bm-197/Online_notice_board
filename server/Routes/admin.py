@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header
-from Models.schemas import Post
-from Database.supabase import supabase
+from ..Models.schemas import Post
+from ..Database.supabase import supabase
 
 router = APIRouter()
 

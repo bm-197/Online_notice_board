@@ -9,8 +9,6 @@ const Header = () => {
   const handleLogout = () => {
     // Remove authentication token and role from localStorage
     localStorage.removeItem("adminToken");
-    localStorage.removeItem("role");
-
     // Redirect to the SignIn page
     navigate("/signin");
   };

@@ -7,7 +7,7 @@ import PostReview from "./components/PostReview";
 import CreatePost from "./components/CreatePost";
 
 const App = () => {
-  const isAuthenticated = localStorage.getItem("adminToken") === "authenticated";
+  const isAuthenticated = localStorage.getItem("adminToken") ? true : false;
 
   return (
     <Router>

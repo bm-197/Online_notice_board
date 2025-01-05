@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { JWT_SECRET_KEY, API } from "../config.js/env";
+
 
 const SignIn = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -10,18 +12,17 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/signin", credentials, {
+      const response = await axios.post(`${API}/auth/signin`, credentials, {
         headers: {
           "Content-Type": "application/json",
         },
       });
   
-      console.log("API Response:", response.data); // Debugging
+      console.log("API Response:", response.data);
   
-      if (response.data.success === "yes") {
+      if (response.status == 200) {
         console.log("Successfully Loged in")
-        localStorage.setItem("adminToken", "authenticated");
-        localStorage.setItem("role", "admin");
+        localStorage.setItem("adminToken", response.data.access_token);
         setResponseMessage("Sign-in successful!");
         navigate("/dashboard"); // Redirect to dashboard
       } else {

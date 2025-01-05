@@ -13,6 +13,11 @@ class SigninUser(BaseModel):
     email: str
     password: str
 
+class SignupClub(BaseModel):
+    name: str
+    email: str
+    password: str
+
 # Pydantic BaseModel for handling user Post information
 class Post(BaseModel):
     post_title: str

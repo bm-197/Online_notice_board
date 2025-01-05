@@ -35,7 +35,7 @@ def club_create_post(post: Post, data: dict[str, Any] = Depends(get_current_user
 def club_read_posts(data: dict[str, Any] = Depends(get_current_user)):
     try:
         if data["role"] == "club":
-            response = supabase.table("posts").select("*").eq("posted_by", data["user_id"]).execute()
+            response = supabase.table("posts").select("*, user_to_role(user_name)").eq("posted_by", data["user_id"]).execute()
             if not response.data:
                 raise HTTPException(status_code=404, detail="No Posts Found For This Club")
         else:
@@ -56,7 +56,7 @@ def club_read_posts(data: dict[str, Any] = Depends(get_current_user)):
 def club_read_post(id: str, data: dict[str, Any] = Depends(get_current_user)):
     try:
         if data["role"] == "club":
-            response = supabase.table("posts").select("*").eq("posted_by", data["user_id"]).eq("post_id", id).execute()
+            response = supabase.table("posts").select("*, user_to_role(user_name)").eq("post_id", id).eq("posted_by", data["user_id"]).execute()
             if not response.data:
                 raise HTTPException(status_code=404, detail=f"No Post Found By {id}")
         else:

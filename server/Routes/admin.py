@@ -35,7 +35,7 @@ def admin_create_post(post: Post, data: dict[str, Any] = Depends(get_current_use
 def admin_read_posts(data: dict[str, Any] = Depends(get_current_user)):
     try:
         if data["role"] == 'admin':
-            response = supabase.table("posts").select("*").execute()
+            response = supabase.table("posts").select("*, user_to_role(user_name)").execute()
             print(response.data)
             if not response.data:
                 raise HTTPException(status_code=400, detail="No Post Found")
@@ -57,7 +57,7 @@ def admin_read_posts(data: dict[str, Any] = Depends(get_current_user)):
 def club_read_post(id: str, data: dict[str, Any] = Depends(get_current_user)):
     try:
         if data["role"] == "admin":
-            response = supabase.table("posts").select("*").eq("posted_by", data["user_id"]).eq("post_id", id).execute()
+            response = supabase.table("posts").select("*, user_to_role(user_name)").eq("post_id", id).execute()
             if not response.data:
                 raise HTTPException(status_code=404, detail=f"No Post Found By {id}")
         else:

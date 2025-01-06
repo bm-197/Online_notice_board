@@ -1,44 +1,67 @@
-import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, Typography, Button, Stack, CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API } from "../config.js/env"; // Replace with your actual API endpoint
 
 const PostReview = () => {
-  const [posts, setPosts] = useState([
-    { id: 1, title: "Event 1", status: "Pending" },
-    { id: 2, title: "Event 2", status: "Pending" },
-  ]);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const handleApprove = (id) => {
-    setPosts(posts.map(post => post.id === id ? { ...post, status: "Approved" } : post));
-  };
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${API}/admin/post`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        });
+        setPosts(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setLoading(false);
+      }
+    };
 
-  const handleReject = (id) => {
-    setPosts(posts.map(post => post.id === id ? { ...post, status: "Rejected" } : post));
+    fetchPosts();
+  }, []);
+
+  const handleViewPost = (id) => {
+    navigate(`/dashboard/post/detail/${id}`);
   };
 
   return (
-    <div style={{ padding: "20px", marginTop: "65px" }}>
-      <Typography variant="h5">Review Posts</Typography>
-      {posts.map((post) => (
-        <div key={post.id} style={{ marginBottom: "10px" }}>
-          <Typography>{post.title}</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleApprove(post.id)}
-            style={{ marginRight: "10px" }}
+    <Stack spacing={3} style={{ marginTop: "50px" }}>
+      {loading ? (
+        <CircularProgress style={{ margin: "auto" }} />
+      ) : (
+        posts.map((post) => (
+          <Card
+            key={post.post_id}
+            style={{
+              borderLeft: "5px solid orange",
+            }}
           >
-            Approve
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => handleReject(post.id)}
-          >
-            Reject
-          </Button>
-        </div>
-      ))}
-    </div>
+            <CardContent>
+              <Typography variant="h6">{post.post_title}</Typography>
+              <Typography color="textSecondary">{"Status: Pending"}</Typography>
+              <div style={{ marginTop: "10px" }}>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  size="small"
+                  onClick={() => handleViewPost(post.post_id)}
+                >
+                  View Details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))
+      )}
+    </Stack>
   );
 };
 

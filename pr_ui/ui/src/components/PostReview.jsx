@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography, Button, Stack, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API } from "../config.js/env"; // Replace with your actual API endpoint
+import { API } from "../config/env"; // Replace with your actual API endpoint
 
 const PostReview = () => {
   const [posts, setPosts] = useState([]);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, TextField, Typography, CircularProgress, Card, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
-import { API } from "../config.js/env";
+import { API } from "../config/env";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",

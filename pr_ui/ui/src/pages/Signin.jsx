@@ -3,7 +3,7 @@ import { Button, TextField, Typography, Box, Card, Stack, Divider, CircularProgr
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API } from "../config.js/env";
+import { API } from "../config/env";
 
 // Styled Card for consistent UI design
 const StyledCard = styled(Card)(({ theme }) => ({

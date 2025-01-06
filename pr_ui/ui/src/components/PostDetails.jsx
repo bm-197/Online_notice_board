@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Card, CardContent, Typography, CircularProgress, Button, TextField } from "@mui/material";
 import axios from "axios";
-import { API } from "../config.js/env"; // Replace with your actual API endpoint
+import { API } from "../config/env"; // Replace with your actual API endpoint
 
 const PostDetails = () => {
   const { id } = useParams();

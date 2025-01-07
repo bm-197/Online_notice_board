@@ -1,84 +1,151 @@
 import React, { useState } from "react";
-import { Button, TextField, Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Button, TextField, Typography, Box, Card, Stack, Divider, CircularProgress } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API } from "../config/env";
+
+// Styled Card for consistent UI design
+const StyledCard = styled(Card)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignSelf: "center",
+  width: "100%",
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  margin: "auto",
+  maxWidth: "300px",
+  boxShadow:
+    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
+  [theme.breakpoints.up("sm")]: {
+    width: "450px",
+  },
+}));
+
+const SignInContainer = styled(Stack)(({ theme }) => ({
+  height: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: theme.spacing(2),
+}));
 
 const SignIn = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const validateInputs = () => {
+    let isValid = true;
+
+    if (!credentials.email || !/\S+@\S+\.\S+/.test(credentials.email)) {
+      setEmailError(true);
+      setEmailErrorMessage("Please enter a valid email address.");
+      isValid = false;
+    } else {
+      setEmailError(false);
+      setEmailErrorMessage("");
+    }
+
+    if (!credentials.password || credentials.password.length < 6) {
+      setPasswordError(true);
+      setPasswordErrorMessage("Password must be at least 6 characters long.");
+      isValid = false;
+    } else {
+      setPasswordError(false);
+      setPasswordErrorMessage("");
+    }
+
+    return isValid;
+  };
 
   const handleSignIn = async () => {
+    if (!validateInputs()) return;
+
+    setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/signin", credentials, {
+      const response = await axios.post(`${API}/auth/signin`, credentials, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-  
-      console.log("API Response:", response.data); // Debugging
-  
-      if (response.data.success === "yes") {
-        console.log("Successfully Loged in")
-        localStorage.setItem("adminToken", "authenticated");
-        localStorage.setItem("role", "admin");
+
+      if (response.status === 200 && response.data?.access_token) {
+        localStorage.setItem("adminToken", response.data.access_token);
         setResponseMessage("Sign-in successful!");
-        navigate("/dashboard"); // Redirect to dashboard
+        setTimeout(() => navigate("/dashboard"), 1500); // Redirect after 1.5 seconds
       } else {
         setResponseMessage(response.data.error || "Sign-in failed");
       }
     } catch (error) {
-      console.error("Error during sign-in:", error); // Debugging
       setResponseMessage(
         `An error occurred: ${error.response?.data?.error || error.message}`
       );
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   return (
-    <Box
-      sx={{
-        maxWidth: 400,
-        margin: "auto",
-        padding: 3,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Typography variant="h5" sx={{ marginBottom: 2, color: "black"}}>
-        Admin Sign-In
-      </Typography>
-      <TextField
-        label="Email"
-        type="email"
-        value={credentials.email}
-        onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-        fullWidth
-        sx={{ marginBottom: 2 }}
-      />
-      <TextField
-        label="Password"
-        type="password"
-        value={credentials.password}
-        onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-        fullWidth
-        sx={{ marginBottom: 2 }}
-      />
-      <Button variant="contained" color="primary" onClick={handleSignIn} fullWidth>
-        Sign In
-      </Button>
-      {responseMessage && (
-        <Typography
-          sx={{
-            marginTop: 2,
-            color: responseMessage === "successful" ? "green" : "red",
-          }}
-        >
-          {responseMessage}
+    <SignInContainer direction="column" justifyContent="center">
+      <StyledCard variant="outlined">
+        <Typography component="h1" variant="h4" sx={{ fontSize: "clamp(2rem, 10vw, 2.15rem)" }}>
+          Admin Sign-In
         </Typography>
-      )}
-    </Box>
+        <Box
+          component="form"
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            value={credentials.email}
+            onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+            error={emailError}
+            helperText={emailErrorMessage}
+            color={emailError ? "error" : "primary"}
+            disabled={loading}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            value={credentials.password}
+            onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            color={passwordError ? "error" : "primary"}
+            disabled={loading}
+          />
+          <Button
+            variant="contained"
+            onClick={handleSignIn}
+            fullWidth
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} style={{ color: "white" }} /> : "Sign In"}
+          </Button>
+          {responseMessage && (
+            <Typography
+              sx={{
+                marginTop: 2,
+                color: responseMessage.includes("successful") ? "green" : "red",
+                textAlign: "center",
+              }}
+            >
+              {responseMessage}
+            </Typography>
+          )}
+        </Box>
+      </StyledCard>
+    </SignInContainer>
   );
 };
 

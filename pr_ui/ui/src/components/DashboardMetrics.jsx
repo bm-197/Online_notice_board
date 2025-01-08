@@ -12,9 +12,9 @@ const DashboardMetrics = () => {
   };
 
   return (
-    <Grid container spacing={3} style={{ padding: "20px" }}>
+    <Grid container spacing={3} style={{ padding: "20px", marginTop: "50px"}}>
       <Grid item xs={12}>
-        <Typography variant="h4" align="center" gutterBottom>
+        <Typography variant="h4" align="center" gutterBottom style={{ color: "black"}}>
           Dashboard Overview
         </Typography>
       </Grid>

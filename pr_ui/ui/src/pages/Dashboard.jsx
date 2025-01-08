@@ -2,7 +2,6 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import DashboardMetrics from "../components/DashboardMetrics";
 
 const Dashboard = () => {
   const location = useLocation();

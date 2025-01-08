@@ -17,6 +17,7 @@ const PostReview = () => {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           },
         });
+        console.log(response.data);
         setPosts(response.data);
         setLoading(false);
       } catch (error) {
@@ -37,29 +38,31 @@ const PostReview = () => {
       {loading ? (
         <CircularProgress style={{ margin: "auto" }} />
       ) : (
-        posts.map((post) => (
-          <Card
-            key={post.post_id}
-            style={{
-              borderLeft: "5px solid orange",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h6">{post.post_title}</Typography>
-              <Typography color="textSecondary">{"Status: Pending"}</Typography>
-              <div style={{ marginTop: "10px" }}>
-                <Button
-                  variant="outlined"
-                  color="info"
-                  size="small"
-                  onClick={() => handleViewPost(post.post_id)}
-                >
-                  View Details
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))
+        posts
+          .filter((post) => post.user_to_role?.Role !== "admin") // Corrected property name
+          .map((post) => (
+            <Card
+              key={post.post_id}
+              style={{
+                borderLeft: "5px solid orange",
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6">{post.post_title}</Typography>
+                <Typography color="textSecondary">{"Status: Pending"}</Typography>
+                <div style={{ marginTop: "10px" }}>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    size="small"
+                    onClick={() => handleViewPost(post.post_id)}
+                  >
+                    View Details
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
       )}
     </Stack>
   );

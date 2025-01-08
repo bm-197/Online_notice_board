@@ -5,6 +5,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupIcon from "@mui/icons-material/Group";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import ReviewIcon from "@mui/icons-material/RateReview";
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const Sidebar = () => (
   <div
@@ -37,6 +38,10 @@ const Sidebar = () => (
       <ListItem button component={Link} to="/dashboard/posts/create">
         <PostAddIcon style={{ marginRight: "10px" }} />
         <ListItemText primary="Create Post" />
+      </ListItem>
+      <ListItem button component={Link} to="/dashboard/posts/view">
+        <ArrowUpwardIcon style={{ marginRight: "10px" }} />
+        <ListItemText primary="View Post" />
       </ListItem>
     </List>
   </div>

@@ -24,7 +24,7 @@ def club_read_posts(data: dict[str, Any] = Depends(get_current_user)):
         print(f"error: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
     
-    return response.data
+    return {"data":response.data}
 
 # Endpoint for retrieving a post for students, ensuring proper role authorization..
 @router.get("/post/{id}")
@@ -45,4 +45,4 @@ def club_read_post(id: str, data: dict[str, Any] = Depends(get_current_user)):
         print(f"error: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
     
-    return response.data
+    return {"data":response.data}
